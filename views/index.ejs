@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link
+      href="/stylesheets/bootstrap.css"
+      rel="stylesheet"
+    />
+    <style>
+      label {
+        font-weight: normal;
+      }
+      .delete{
+        color: red
+      }
+    </style>
+  </head>
+  <script>
+    const addNewList = () => {
+      console.log('点击了', window.location.href)
+      window.location.href = window.location.hostname+'/create'
+    }
+  </script>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-lg-8 col-lg-offset-2">
+          <h2>记账本</h2>
+          <hr />
+          <div class="accounts">
+            <% accounts.forEach(item => { %>
+            <div class="panel <%= item.type==='-1' ? 'panel-danger' : 'panel-success'  %>">
+              <div class="panel-heading"><%= item.time %></div>
+              <div class="panel-body">
+                <div class="col-xs-6"><%= item.title %></div>
+                <div class="col-xs-2 text-center">
+                  <span class="label <%= item.type==='-1' ? 'label-warning' : 'label-success'  %>"><%= item.type==='-1' ? '支出' : '收入'  %></span>
+                </div>
+                <div class="col-xs-2 text-right"><%= item.account %> 元</div>
+                <div class="col-xs-2 text-right">
+                  <a href="/delete/<%= item.id %>">
+                  <span class="delete">删除</span>
+                </a>
+                </div>
+              </div>
+            </div>
+            <% }) %>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-lg-8 col-lg-offset-2">
+          <h2>添加记录</h2>
+          <hr />
+          <form method="post" action="/account">
+            <div class="form-group">
+              <label for="item">事项</label>
+              <input
+                name="title"
+                type="text"
+                class="form-control"
+                id="item"
+              />
+            </div>
+            <div class="form-group">
+              <label for="time">时间</label>
+              <input
+                name="time"
+                type="text"
+                class="form-control"
+                id="time"
+              />
+            </div>
+            <div class="form-group">
+              <label for="type">类型</label>
+              <select name="type" class="form-control" id="type">
+                <option value="-1">支出</option>
+                <option value="1">收入</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="account">金额</label>
+              <input
+                name="account"
+                type="text"
+                class="form-control"
+                id="account"
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="remarks">备注</label>
+              <textarea name="remarks" class="form-control" id="remarks"></textarea>
+            </div>
+            <hr>
+            <button type="submit" class="btn btn-primary btn-block">添加</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/jquery.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/bootstrap-datepicker.min.js"></script>
+    <script src="/javascripts/bootstrap-datepicker.zh-CN.min.js"></script>
+    <script src="/javascripts/main.js"></script>
+  </body>
+</html>
