@@ -24,7 +24,7 @@ const listSchema = new Schema({
 
 // 创建 Model
 const List = mongoose.model('list', listSchema);
-const { accounts } = require('./list.json');
+// const { accounts } = require('./list.json');
 
 // 插入数据
 // List.insertMany(accounts)

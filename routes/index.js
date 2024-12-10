@@ -1,19 +1,18 @@
 var express = require('express');
 var router = express.Router();
-// const fs = require('fs')
-// const path = require('path')
-
 const List = require('../data/list.js')
-
-// const { accounts } = require('../data/list.json')
+//导入中间件
+let checkTokenMiddleware = require('../middlewares/checkTokenMiddleware');
 
 // 首页 列表页面
-router.get('/', function(req, res, next) {
+router.get('/', checkTokenMiddleware, function(req, res, next) {
   List.find().then((data) => {
     console.log('Retrieved data:', data);
-    // res.render('index', { title: 'Express11122', accounts: data });
-    res.send(data)
-    // mongoose.connection.close(); // Close the connection after querying
+    res.send({
+      code: '0000',
+      msg: 'success', 
+      data: data
+    })
   })
   .catch((error) => {
     console.error('Failed to query data:', error);
@@ -21,7 +20,7 @@ router.get('/', function(req, res, next) {
 });
 
 // 新增列表
-router.post('/account', (req, res, next) => {
+router.post('/account', checkTokenMiddleware, (req, res, next) => {
   const params = req.body;
 
   // 根据具体业务逻辑生成唯一标识符，比如唯一的用户名、邮箱等
@@ -32,14 +31,15 @@ router.post('/account', (req, res, next) => {
       if (existingData) {
         console.log('数据已存在：', existingData);
         return;
-        // 返回提示信息，数据已存在
-        // res.render('index', { title: '数据已存在', accounts: existingData });
       } else {
         let data = { id: Math.random(), ...params };
         List.create(data)
           .then(result => {
-            // res.redirect('/');
-            res.send(data)
+            res.send({
+              code: '0000',
+              data: data,
+              msg: 'success'
+            })
           })
           .catch(error => {
             console.error('数据插入失败：', error);
@@ -54,7 +54,7 @@ router.post('/account', (req, res, next) => {
 })
 
 // 删除列表
-router.get('/delete/:id', (req, res, next) => {
+router.get('/delete/:id', checkTokenMiddleware, (req, res, next) => {
   const { id } = req.params
   List.deleteOne({ id: id })
   .then((result) => {
@@ -64,7 +64,11 @@ router.get('/delete/:id', (req, res, next) => {
       console.log('未找到要删除的数据');
     }
     // res.redirect('/');
-    res.send('删除成功')
+    res.send({
+      code: '0000',
+      msg: 'success', 
+      data: data,
+    })
   })
   .catch((error) => {
     console.error('数据删除失败：', error);
