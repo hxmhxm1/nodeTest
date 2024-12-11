@@ -23,8 +23,6 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   let { username, password } = req.body
-  console.log('登录参数', username, password)
-  // res.send('登录成功---')
   userModel.findOne({username: username}).then((data) => {
     // 判断data
     if(!data){
